@@ -3,7 +3,7 @@ export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log(useLocation);
+ 
   function mathRoute(route) {
     if (route === location.pathname) {
       return true;
