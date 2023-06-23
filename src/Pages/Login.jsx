@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { Google } from "../Components/Google";
 let initState = {
   email: "",
   password: "",
@@ -37,7 +38,7 @@ export const Login = () => {
               placeholder="Enter email address"
               value={email}
               onChange={handleChange}
-              className="w-full rounded bg-white px-4 py-2 text-2xl text-gray-700 border-gray-700 transition ease-in-out mb-6"
+              className="w-full rounded bg-white px-4 py-2 text-xl text-gray-700 border-gray-700 transition ease-in-out mb-6"
             />
             <div className="relative mb-6">
               <input
@@ -46,7 +47,7 @@ export const Login = () => {
                 placeholder="Enter Your Password"
                 value={password}
                 onChange={handleChange}
-                className="w-full rounded bg-white px-4 py-2 text-2xl text-gray-700 border-gray-700 transition ease-in-out"
+                className="w-full rounded bg-white px-4 py-2 text-xl text-gray-700 border-gray-700 transition ease-in-out"
               />
               {showPassword ? (
                 <AiFillEyeInvisible
@@ -88,6 +89,8 @@ export const Login = () => {
             <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-700 after:flex-1  after:border-t after:border-gray-700">
               <p className="text-center font-semibold mx-4">OR</p>
             </div>
+
+            <Google />
           </form>
         </div>
       </div>
