@@ -1,19 +1,46 @@
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { db } from "../firebase";
 
 export const Profile = () => {
   const auth = getAuth();
-const navigate=useNavigate()
+  const navigate = useNavigate();
   const [formData, setformData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   });
+  const [change, setChange] = useState(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setformData((pre) => {
+      return { ...pre, [name]: value };
+    });
+  };
   const { name, email } = formData;
-  const handleSignOut=()=>{
-    auth.signOut()
-  navigate("/")
-  }
+  const handleSignOut = () => {
+    auth.signOut();
+    navigate("/");
+  };
+
+  const onsubmit = async () => {
+    try {
+      if (auth.currentUser.displayName != name) {
+        await updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+        const docRef=doc(db,"users",auth.currentUser.uid)
+        await updateDoc(docRef,{
+          name,
+        })
+      }
+      toast.success("Profile updated successfully")
+    } catch (error) {
+      toast.error("Could not update the details");
+    }
+  };
   return (
     <>
       <section className="flex flex-col mx-auto max-w-3xl justify-center">
@@ -23,25 +50,40 @@ const navigate=useNavigate()
           <input
             type="text"
             name="name"
+            disabled={!change}
             value={name}
             className="text-2xl text-gray-700 border border-gray-300 rounded bg-whtie w-full transition ease-in-out"
+            onChange={handleChange}
           />
           <input
             type="text"
             name="email"
             value={email}
+            disabled={!change}
+            onChange={handleChange}
             className="text-2xl text-gray-700 border border-gray-300 rounded bg-whtie w-full transition ease-in-out mt-5"
           />
         </div>
         <div className="flex justify-between whitespace-nowrap text-sm  sm:text-lg mb-6 px-3">
           <p className="flex items-center">
             Do you want to change your name?{" "}
-            <span className="text-red-500 font-semibold hover:text-red-700 cursor-pointer ml-2">
-              Edit
+            <span
+              className="text-red-500 font-semibold hover:text-red-700 cursor-pointer ml-2"
+              onClick={() => {
+                change && onsubmit();
+                setChange((pre) => !pre);
+              }}
+            >
+              {change ? "Apply Changes" : "Edit"}
             </span>
           </p>
 
-          <p className="text-blue-600 hover:text-blue-800 font-bold cursor-pointer" onClick={handleSignOut}>Sign out</p>
+          <p
+            className="text-blue-600 hover:text-blue-800 font-bold cursor-pointer"
+            onClick={handleSignOut}
+          >
+            Sign out
+          </p>
         </div>
       </section>
     </>
