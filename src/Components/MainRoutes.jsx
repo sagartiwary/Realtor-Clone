@@ -7,6 +7,7 @@ import { ForgotPassword } from "../Pages/ForgotPassword";
 import { Register } from "../Pages/Register";
 import { Login } from "../Pages/Login";
 import { PrivateRoute } from "./PrivateRoute";
+import { CreateListing } from "../Pages/CreateListing";
 export const MainRoutes = () => {
   return (
     <div>
@@ -16,6 +17,7 @@ export const MainRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/password" element={<ForgotPassword />} />
         <Route path="/offer" element={<Offer />} />
+        <Route path="/create-listing" element={<CreateListing/>}/>
 
         <Route
           path="/profile"

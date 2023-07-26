@@ -1,17 +1,27 @@
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
- 
+  const [state, setState] = useState("sign in");
+  const auth = getAuth();
   function mathRoute(route) {
     if (route === location.pathname) {
       return true;
     }
   }
-
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setState("Profile");
+      } else {
+        setState("sign in");
+      }
+    });
+  }, [auth]);
   return (
-    <div className="bg-white border-b shadow-sm sticky top-0 z-50">
+    <div className="bg-white border-b shadow-sm sticky top-0 z-40">
       <header className="flex justify-between items-center  px-3 max-w-6xl mx-auto">
         <div>
           <img
@@ -25,7 +35,7 @@ export const Navbar = () => {
           <ul className="flex space-x-10">
             <li
               className={`cursor-pointer py-3 border-b-[3px] font-semibold text-grey border-b-transparent ${
-                mathRoute("/") && "text-black border-b-red-500"
+                mathRoute("/") && "text-black border-b-red-700"
               }`}
               onClick={() => navigate("/")}
             >
@@ -33,7 +43,7 @@ export const Navbar = () => {
             </li>
             <li
               className={`cursor-pointer py-3 border-b-[3px] font-semibold text-grey border-b-transparent ${
-                mathRoute("/offer") && "text-black border-b-red-500"
+                mathRoute("/offer") && "text-black border-b-red-700"
               }`}
               onClick={() => navigate("/offer")}
             >
@@ -41,11 +51,12 @@ export const Navbar = () => {
             </li>
             <li
               className={`cursor-pointer py-3 border-b-[3px] font-semibold text-grey border-b-transparent ${
-                mathRoute("/login") && "text-black border-b-red-500"
+                (mathRoute("/login") || mathRoute("/profile")) &&
+                "text-black border-b-red-700"
               }`}
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/profile")}
             >
-              Sign in
+              {state}
             </li>
           </ul>
         </div>

@@ -1,9 +1,10 @@
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../firebase";
+import {FcHome} from 'react-icons/fc'
 
 export const Profile = () => {
   const auth = getAuth();
@@ -85,6 +86,11 @@ export const Profile = () => {
             Sign out
           </p>
         </div>
+        <button className="w-full bg-blue-600 px-7 py-3 text-white uppercase hover:bg-blue-700 text-sm active:bg-blue-800">
+          <Link className="flex justify-center items-center" to={"/create-listing"}> 
+          <FcHome className="mr-2 text-3xl rounded-full border-2 bg-red-200" />
+          Sell/Rent your home</Link>
+        </button>
       </section>
     </>
   );
